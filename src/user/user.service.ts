@@ -17,7 +17,7 @@ export class UserService {
       },
     });
   }
-  findeOne(idOrEmail: string) {
+  findOne(idOrEmail: string) {
     return this.prismaService.user.findFirst({
       where: {
         OR: [
@@ -34,6 +34,9 @@ export class UserService {
   delete(id: string) {
     return this.prismaService.user.delete({
       where: { id },
+      select: {
+        id: true,
+      },
     });
   }
 

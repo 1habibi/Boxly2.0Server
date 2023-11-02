@@ -18,7 +18,7 @@ export class AuthService {
     private readonly prismaService: PrismaService,
   ) {}
   async register(dto: RegisterDto) {
-    const user: User = await this.userService.findeOne(dto.email).catch((err) => {
+    const user: User = await this.userService.findOne(dto.email).catch((err) => {
       this.logger.error(err);
       return null;
     });
@@ -32,7 +32,7 @@ export class AuthService {
   }
 
   async login(dto: LoginDto, agent: string): Promise<Tokens> {
-    const user: User = await this.userService.findeOne(dto.email).catch((err) => {
+    const user: User = await this.userService.findOne(dto.email).catch((err) => {
       this.logger.error(err);
       return null;
     });
@@ -79,7 +79,7 @@ export class AuthService {
     if (new Date(token.exp) < new Date()) {
       throw new UnauthorizedException();
     }
-    const user = await this.userService.findeOne(token.userId);
+    const user = await this.userService.findOne(token.userId);
     return this.generateTokens(user, agent);
   }
 }
