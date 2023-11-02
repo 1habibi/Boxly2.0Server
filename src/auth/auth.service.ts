@@ -30,7 +30,6 @@ export class AuthService {
       return null;
     });
   }
-
   async login(dto: LoginDto, agent: string): Promise<Tokens> {
     const user: User = await this.userService.findOne(dto.email).catch((err) => {
       this.logger.error(err);
@@ -40,6 +39,9 @@ export class AuthService {
       throw new UnauthorizedException('Неверный логин или пароль');
     }
     return this.generateTokens(user, agent);
+  }
+  deleteRefreshToken(token: string) {
+    return this.prismaService.token.delete({ where: { token } });
   }
   private async generateTokens(user: User, agent: string): Promise<Tokens> {
     const accessToken =
