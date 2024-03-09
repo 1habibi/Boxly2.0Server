@@ -16,7 +16,7 @@ export class TelegramService extends Telegraf<Context> {
     private readonly prismaService: PrismaService,
     private readonly userService: UserService,
   ) {
-    super('6747646023:AAGYgjXE0TQlzwYplzxIkuSOXDOmTxw1Tms');
+    super('YOUR_TELEGRAM_API');
   }
 
   @Public()
