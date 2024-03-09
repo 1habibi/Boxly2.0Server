@@ -26,6 +26,12 @@ export class UserService {
       },
     });
   }
+  async getUserWithProfile(id: string) {
+    return this.prismaService.user.findUnique({
+      where: { id },
+      include: { Profile: true },
+    });
+  }
   async findOne(idOrEmail: string, isReset = false) {
     if (isReset) {
       await this.cacheManager.del(idOrEmail);
@@ -52,7 +58,6 @@ export class UserService {
     }
     return user;
   }
-
   async delete(id: string, user: JwtPayload) {
     if (user.id !== id && !user.roles.includes(Role.ADMIN)) {
       throw new ForbiddenException();

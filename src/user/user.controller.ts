@@ -3,6 +3,7 @@ import {
   Controller,
   Delete,
   Get,
+  NotFoundException,
   Param,
   ParseUUIDPipe,
   UseGuards,
@@ -18,13 +19,20 @@ import { Role } from '@prisma/client';
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
+  @Get('user-with-profile')
+  async getUserWithProfile(@CurrentUser() user: JwtPayload) {
+    const userWithProfile = await this.userService.getUserWithProfile(user.id);
+    if (!userWithProfile) {
+      throw new NotFoundException('Пользователь не найден');
+    }
+    return new UserResponse(userWithProfile);
+  }
   @UseInterceptors(ClassSerializerInterceptor)
   @Get(':idOrEmail')
   async findOneUser(@Param('idOrEmail') idOrEmail: string) {
     const user = await this.userService.findOne(idOrEmail);
     return new UserResponse(user);
   }
-
   @Delete(':id')
   deleteUser(@Param('id', ParseUUIDPipe) id: string, @CurrentUser() user: JwtPayload) {
     return this.userService.delete(id, user);
