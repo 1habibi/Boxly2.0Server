@@ -8,9 +8,17 @@ import { ConfigModule } from '@nestjs/config';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtAuthGuard } from '@auth/guards/jwt-auth.guard';
 import { ProfileModule } from './profile/profile.module';
+import { TelegramModule } from './telegram/telegram.module';
 
 @Module({
-  imports: [UserModule, PrismaModule, AuthModule, ConfigModule.forRoot({ isGlobal: true }), ProfileModule],
+  imports: [
+    UserModule,
+    PrismaModule,
+    AuthModule,
+    ConfigModule.forRoot({ isGlobal: true }),
+    ProfileModule,
+    TelegramModule,
+  ],
   controllers: [AppController],
   providers: [
     AppService,

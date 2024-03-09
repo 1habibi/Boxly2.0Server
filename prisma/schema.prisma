@@ -43,6 +43,7 @@ model Profile {
   address     String?
   phoneNumber String?   @map("phone_number")
   userId      String    @unique
+  telegramId  String?   @unique @map("telegram_id")
   createdAt   DateTime  @default(now()) @map("created_at")
   updatedAt   DateTime  @updatedAt @map("updated_at")
 
