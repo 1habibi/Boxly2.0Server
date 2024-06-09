@@ -6,6 +6,7 @@ import { ConfigModule } from '@nestjs/config';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtAuthGuard } from '@auth/guards/jwt-auth.guard';
 import { ProfileModule } from './profile/profile.module';
+import { ImageKitModule } from './image-kit/image-kit.module';
 import { TelegramModule } from './telegram/telegram.module';
 import { OrderModule } from './order/order.module';
 
@@ -18,6 +19,7 @@ import { OrderModule } from './order/order.module';
     ProfileModule,
     OrderModule,
     TelegramModule,
+    ImageKitModule,
   ],
   providers: [
     {
