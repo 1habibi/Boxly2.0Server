@@ -1,6 +1,6 @@
 import { Body, Controller, Get, Param, Patch, Post } from '@nestjs/common';
 import { ProfileService } from './profile.service';
-import { Profile } from '@prisma/client';
+import { Profile, User } from '@prisma/client';
 import { CurrentUser } from '@common/decorators';
 import { JwtPayload } from '@auth/interfaces';
 @Controller('profile')
@@ -12,6 +12,11 @@ export class ProfileController {
     return this.profileService.getAllProfiles();
   }
 
+  @Get('current')
+  async getCurrentProfile(@CurrentUser() user: JwtPayload) {
+    return this.profileService.getProfileByUserId(user.id);
+  }
+
   // @Get(':id')
   // async getProfileById(@Param('id') id: string) {
   //   return this.profileService.getProfileById(id);
@@ -21,6 +26,7 @@ export class ProfileController {
   async getProfileByUserId(@Param('id') userId: string) {
     return this.profileService.getProfileByUserId(userId);
   }
+
   @Post()
   async createProfile(@Body() data: Partial<Profile>, @CurrentUser() user: JwtPayload) {
     return this.profileService.createProfile(data, user);

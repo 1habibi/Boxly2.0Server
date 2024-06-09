@@ -10,7 +10,7 @@ import {
   UnauthorizedException,
   UseInterceptors,
 } from '@nestjs/common';
-import { LoginDto, RegisterDto } from '@auth/dto';
+import { LoginDto, RefreshTokenMobileDto, RegisterDto } from '@auth/dto';
 import { AuthService } from '@auth/auth.service';
 import { Tokens } from '@auth/interfaces';
 import { Response } from 'express';
@@ -46,6 +46,18 @@ export class AuthController {
     this.setRefreshTokenToCookies(tokens, res);
   }
 
+  @Post('login-mobile')
+  async loginMobile(@Body() dto: LoginDto, @Res() res: Response, @UserAgent() agent: string) {
+    const user = await this.authService.getUser(dto);
+    const tokens = await this.authService.login(dto, agent);
+    if (!tokens) {
+      throw new BadRequestException(`Не получается логин пользователя с данными ${JSON.stringify(dto)}`);
+    }
+    res
+      .status(HttpStatus.CREATED)
+      .json({ accessToken: tokens.accessToken, refreshToken: tokens.refreshToken.token, user });
+  }
+
   @Get('logout')
   async logout(@Cookie(REFRESH_TOKEN) refreshToken: string, @Res() res: Response) {
     if (!refreshToken) {
@@ -69,13 +81,31 @@ export class AuthController {
     this.setRefreshTokenToCookies(tokens, res);
   }
 
+  @Post('refresh-tokens-mobile')
+  async refreshTokensMobile(
+    @Body() { refreshToken }: RefreshTokenMobileDto,
+    @Res() res: Response,
+    @UserAgent() agent: string,
+  ) {
+    if (!refreshToken) {
+      throw new UnauthorizedException();
+    }
+    const tokens = await this.authService.refreshTokensMobile(refreshToken, agent);
+    if (!tokens) {
+      throw new UnauthorizedException();
+    }
+    res
+      .status(HttpStatus.CREATED)
+      .json({ accessToken: tokens.accessToken, refreshToken: tokens.refreshToken, user: tokens.user });
+  }
+
   private setRefreshTokenToCookies(tokens: Tokens, res: Response) {
     if (!tokens) {
       throw new UnauthorizedException();
     }
     res.cookie(REFRESH_TOKEN, tokens.refreshToken.token, {
       httpOnly: true,
-      // sameSite: 'lax',
+      sameSite: 'lax',
       expires: new Date(tokens.refreshToken.exp),
       secure: this.configService.get('NODE_ENV', 'development') === 'production',
       path: '/',

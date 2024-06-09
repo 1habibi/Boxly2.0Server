@@ -1,4 +1,4 @@
-import { ForbiddenException, Inject, Injectable } from '@nestjs/common';
+import { ForbiddenException, Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '@prisma/prisma.service';
 import { Role, User } from '@prisma/client';
 import { genSaltSync, hashSync } from 'bcrypt';
@@ -7,6 +7,7 @@ import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { Cache } from 'cache-manager';
 import { ConfigService } from '@nestjs/config';
 import { convertToSecondsUtil } from '@common/utils';
+import { compareSync } from 'bcrypt';
 
 @Injectable()
 export class UserService {
@@ -26,12 +27,14 @@ export class UserService {
       },
     });
   }
+
   async getUserWithProfile(id: string) {
     return this.prismaService.user.findUnique({
       where: { id },
       include: { Profile: true },
     });
   }
+
   async findOne(idOrEmail: string, isReset = false) {
     if (isReset) {
       await this.cacheManager.del(idOrEmail);
@@ -58,6 +61,7 @@ export class UserService {
     }
     return user;
   }
+
   async delete(id: string, user: JwtPayload) {
     if (user.id !== id && !user.roles.includes(Role.ADMIN)) {
       throw new ForbiddenException();
@@ -73,5 +77,77 @@ export class UserService {
 
   private hashPassword(password: string) {
     return hashSync(password, genSaltSync(10));
+  }
+
+  async getAllUsers(): Promise<User[]> {
+    const users = await this.prismaService.user.findMany();
+    return users;
+  }
+
+  async getAllCouriers(): Promise<User[]> {
+    const users = await this.prismaService.user.findMany({
+      where: {
+        roles: {
+          has: Role.COURIER,
+        },
+      },
+      include: { Profile: true },
+    });
+    return users;
+  }
+
+  async changeEmail(userId: string, newEmail: string, password: string): Promise<User> {
+    const user = await this.prismaService.user.findUnique({
+      where: { id: userId },
+    });
+
+    if (!user) {
+      throw new NotFoundException('Пользователь не найден');
+    }
+
+    const passwordIsValid = compareSync(password, user.password);
+
+    if (!passwordIsValid) {
+      throw new ForbiddenException('Неверный пароль');
+    }
+
+    await this.cacheManager.del(user.email); // Invalidate cache for the old email
+    await this.cacheManager.del(userId); // Invalidate cache for the user ID
+
+    const updatedUser = await this.prismaService.user.update({
+      where: { id: userId },
+      data: { email: newEmail },
+    });
+
+    await this.cacheManager.set(newEmail, updatedUser, convertToSecondsUtil(this.configService.get('JWT_EXP'))); // Update cache with new email
+
+    return updatedUser;
+  }
+
+  async changePassword(userId: string, oldPassword: string, newPassword: string): Promise<boolean> {
+    const user = await this.prismaService.user.findUnique({
+      where: { id: userId },
+    });
+
+    if (!user) {
+      throw new NotFoundException('Пользователь не найден');
+    }
+
+    const passwordIsValid = compareSync(oldPassword, user.password);
+
+    if (!passwordIsValid) {
+      throw new ForbiddenException('Неверный текущий пароль');
+    }
+
+    const hashedNewPassword = this.hashPassword(newPassword);
+
+    await this.prismaService.user.update({
+      where: { id: userId },
+      data: { password: hashedNewPassword },
+    });
+
+    await this.cacheManager.del(userId); // Invalidate cache for the user ID
+
+    return true;
   }
 }
