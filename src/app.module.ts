@@ -1,6 +1,4 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { UserModule } from './user/user.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { AuthModule } from './auth/auth.module';
@@ -9,6 +7,7 @@ import { APP_GUARD } from '@nestjs/core';
 import { JwtAuthGuard } from '@auth/guards/jwt-auth.guard';
 import { ProfileModule } from './profile/profile.module';
 import { TelegramModule } from './telegram/telegram.module';
+import { OrderModule } from './order/order.module';
 
 @Module({
   imports: [
@@ -17,11 +16,10 @@ import { TelegramModule } from './telegram/telegram.module';
     AuthModule,
     ConfigModule.forRoot({ isGlobal: true }),
     ProfileModule,
+    OrderModule,
     TelegramModule,
   ],
-  controllers: [AppController],
   providers: [
-    AppService,
     {
       provide: APP_GUARD,
       useClass: JwtAuthGuard,

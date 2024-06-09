@@ -20,6 +20,9 @@ model User {
   Token     Token[]
   Profile   Profile?
 
+  customerOrders Order[] @relation("CustomerOrder")
+  courierOrders  Order[] @relation("CourierOrder")
+
   @@map("users")
 }
 
@@ -52,7 +55,41 @@ model Profile {
   @@map("profiles")
 }
 
+model OrderItems {
+  id      Int     @id @default(autoincrement())
+  orderId Int     @map("order_id")
+  url     String
+  count   Int
+  note    String?
+
+  order Order @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  @@map("order_items")
+}
+
+model Order {
+  id           Int      @id @default(autoincrement())
+  customerId   String   @map("customer_id")
+  promo        String?
+  status       String?  @default("Неизвестно")
+  deliveryType String?  @map("delivery_type")
+  courierId    String?  @map("courier_id")
+  price        Int?
+  rate         Int?
+  qr           String?
+  paid         Boolean  @default(false)
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  customer User         @relation("CustomerOrder", fields: [customerId], references: [id])
+  courier  User?        @relation("CourierOrder", fields: [courierId], references: [id])
+  items    OrderItems[]
+
+  @@map("orders")
+}
+
 enum Role {
   ADMIN
   USER
+  COURIER
 }
