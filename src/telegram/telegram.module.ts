@@ -9,5 +9,6 @@ import { UserModule } from '@user/user.module';
   imports: [TelegrafModule.forRootAsync(options()), UserModule],
   providers: [TelegramService],
   controllers: [TelegramController],
+  exports: [TelegramService],
 })
 export class TelegramModule {}

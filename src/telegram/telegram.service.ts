@@ -16,18 +16,17 @@ export class TelegramService extends Telegraf<Context> {
     private readonly prismaService: PrismaService,
     private readonly userService: UserService,
   ) {
-    super('YOUR_TELEGRAM_API');
+    super('6747646023:AAGYgjXE0TQlzwYplzxIkuSOXDOmTxw1Tms');
   }
 
   @Public()
   @Start()
   async onStart(@Ctx() ctx: Context) {
-    await ctx.replyWithHTML(`<b>Привет, ${ctx.from.first_name}</b> Cкинь кружочек с мордочкой :з`);
+    await ctx.replyWithHTML(`<b>Привет, ${ctx.from.first_name}</b> Добро пожаловать в Boxly!!`);
   }
-  @Public()
-  @Hears('test')
-  async onHello(@Ctx() ctx: Context) {
-    await ctx.telegram.sendMessage('508331938', 'yoyoyoyoyooyoy');
+
+  async sendMessageToUser(telegramId: string, message: string) {
+    await this.telegram.sendMessage(telegramId, message);
   }
 
   async linkTelegram(data: TelegramUserResponse, user: JwtPayload) {
@@ -52,9 +51,5 @@ export class TelegramService extends Telegraf<Context> {
     } else {
       throw new ConflictException('Ошибка удаления привязки');
     }
-  }
-
-  async sendMessageToUser(telegramId: string, message: string) {
-    await this.telegram.sendMessage(telegramId, message);
   }
 }
