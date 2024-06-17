@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
-import { TelegramService } from './telegram.service';
+import { UserModule } from '@user/user.module';
 import { TelegrafModule } from 'nestjs-telegraf';
 import { options } from './telegram-config.factory';
 import { TelegramController } from './telegram.controller';
-import { UserModule } from '@user/user.module';
+import { TelegramService } from './telegram.service';
 
 @Module({
   imports: [TelegrafModule.forRootAsync(options()), UserModule],

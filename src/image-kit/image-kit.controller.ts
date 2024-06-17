@@ -1,7 +1,7 @@
-import { Controller, Get, Res } from '@nestjs/common';
-import { ImageKitService } from './image-kit.service';
-import { Response } from 'express';
 import { Public } from '@common/decorators';
+import { Controller, Get, Res } from '@nestjs/common';
+import { Response } from 'express';
+import { ImageKitService } from './image-kit.service';
 
 @Public()
 @Controller('image-kit')

@@ -1,6 +1,6 @@
-import { TelegrafModuleAsyncOptions, TelegrafModuleOptions } from 'nestjs-telegraf';
-import { ConfigService } from '@nestjs/config';
 import { sessionMiddleware } from '@common/middlewares/session.middleware';
+import { ConfigService } from '@nestjs/config';
+import { TelegrafModuleAsyncOptions, TelegrafModuleOptions } from 'nestjs-telegraf';
 
 const telegrafModuleOptions = (config: ConfigService): TelegrafModuleOptions => {
   return {

@@ -1,3 +1,7 @@
+import { AuthService } from '@auth/auth.service';
+import { LoginDto, RefreshTokenMobileDto, RegisterDto } from '@auth/dto';
+import { Tokens } from '@auth/interfaces';
+import { Cookie, Public, UserAgent } from '@common/decorators';
 import {
   BadRequestException,
   Body,
@@ -10,13 +14,9 @@ import {
   UnauthorizedException,
   UseInterceptors,
 } from '@nestjs/common';
-import { LoginDto, RefreshTokenMobileDto, RegisterDto } from '@auth/dto';
-import { AuthService } from '@auth/auth.service';
-import { Tokens } from '@auth/interfaces';
-import { Response } from 'express';
 import { ConfigService } from '@nestjs/config';
-import { Cookie, UserAgent, Public } from '@common/decorators';
 import { UserResponse } from '@user/responses';
+import { Response } from 'express';
 
 const REFRESH_TOKEN = 'refreshtoken';
 

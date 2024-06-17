@@ -1,6 +1,6 @@
-import { OrderItemDto } from './order-item.dto';
-import { IsArray, IsIn, IsNotEmpty, IsString } from 'class-validator';
 import { Type } from 'class-transformer';
+import { IsArray, IsNotEmpty, IsString } from 'class-validator';
+import { OrderItemDto } from './order-item.dto';
 
 export class CreateOrderDto {
   @IsString()

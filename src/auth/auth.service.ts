@@ -1,14 +1,13 @@
-import { ConflictException, Injectable, Logger, UnauthorizedException } from '@nestjs/common';
 import { LoginDto, RegisterDto } from '@auth/dto';
-import { UserService } from '@user/user.service';
 import { Tokens } from '@auth/interfaces';
-import { compareSync } from 'bcrypt';
-import { Token, User } from '@prisma/client';
+import { ConflictException, Injectable, Logger, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+import { Token, User } from '@prisma/client';
 import { PrismaService } from '@prisma/prisma.service';
-import { v4 } from 'uuid';
+import { UserService } from '@user/user.service';
+import { compareSync } from 'bcrypt';
 import { add } from 'date-fns';
-import { access } from 'fs';
+import { v4 } from 'uuid';
 
 @Injectable()
 export class AuthService {

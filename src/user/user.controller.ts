@@ -1,3 +1,6 @@
+import { RolesGuard } from '@auth/guards/role.guard';
+import { JwtPayload } from '@auth/interfaces';
+import { CurrentUser, Roles } from '@common/decorators';
 import {
   Body,
   ClassSerializerInterceptor,
@@ -12,12 +15,9 @@ import {
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
-import { UserService } from '@user/user.service';
-import { UserResponse } from '@user/responses';
-import { CurrentUser, Roles } from '@common/decorators';
-import { JwtPayload } from '@auth/interfaces';
-import { RolesGuard } from '@auth/guards/role.guard';
 import { Role, User } from '@prisma/client';
+import { UserResponse } from '@user/responses';
+import { UserService } from '@user/user.service';
 import { ChangeEmailDto } from './dto/change-email.dto';
 import { ChangePasswordDto } from './dto/change-password.dto';
 

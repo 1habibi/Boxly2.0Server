@@ -1,10 +1,10 @@
-import { Body, Controller, NotFoundException, Patch, Post, UseGuards } from '@nestjs/common';
-import { TelegramService } from './telegram.service';
-import { CurrentUser, Roles } from '@common/decorators';
-import { TelegramUserResponse } from './responses';
-import { JwtPayload } from '@auth/interfaces';
 import { RolesGuard } from '@auth/guards/role.guard';
+import { JwtPayload } from '@auth/interfaces';
+import { CurrentUser, Roles } from '@common/decorators';
+import { Body, Controller, NotFoundException, Patch, Post, UseGuards } from '@nestjs/common';
 import { Role } from '@prisma/client';
+import { TelegramUserResponse } from './responses';
+import { TelegramService } from './telegram.service';
 
 @Controller('telegram')
 export class TelegramController {

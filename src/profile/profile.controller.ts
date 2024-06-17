@@ -1,8 +1,8 @@
-import { Body, Controller, Get, Param, Patch, Post } from '@nestjs/common';
-import { ProfileService } from './profile.service';
-import { Profile, User } from '@prisma/client';
-import { CurrentUser } from '@common/decorators';
 import { JwtPayload } from '@auth/interfaces';
+import { CurrentUser } from '@common/decorators';
+import { Body, Controller, Get, Param, Patch, Post } from '@nestjs/common';
+import { Profile } from '@prisma/client';
+import { ProfileService } from './profile.service';
 @Controller('profile')
 export class ProfileController {
   constructor(private readonly profileService: ProfileService) {}

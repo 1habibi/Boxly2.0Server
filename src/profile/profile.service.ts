@@ -1,7 +1,7 @@
-import { ConflictException, Injectable, Logger, UnauthorizedException } from '@nestjs/common';
-import { PrismaService } from '@prisma/prisma.service';
-import { Profile } from '@prisma/client';
 import { JwtPayload } from '@auth/interfaces';
+import { ConflictException, Injectable, Logger } from '@nestjs/common';
+import { Profile } from '@prisma/client';
+import { PrismaService } from '@prisma/prisma.service';
 
 @Injectable()
 export class ProfileService {

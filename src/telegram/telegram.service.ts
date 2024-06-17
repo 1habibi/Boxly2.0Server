@@ -1,11 +1,11 @@
-import { Public } from '@common/decorators';
-import { Ctx, Hears, Start, Update } from 'nestjs-telegraf';
-import { Telegraf, Scenes } from 'telegraf';
-import { TelegramUserResponse } from './responses';
 import { JwtPayload } from '@auth/interfaces';
+import { Public } from '@common/decorators';
 import { ConflictException, Injectable } from '@nestjs/common';
 import { PrismaService } from '@prisma/prisma.service';
 import { UserService } from '@user/user.service';
+import { Ctx, Start, Update } from 'nestjs-telegraf';
+import { Scenes, Telegraf } from 'telegraf';
+import { TelegramUserResponse } from './responses';
 
 type Context = Scenes.SceneContext;
 

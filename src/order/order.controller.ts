@@ -1,22 +1,10 @@
-import {
-  Body,
-  Controller,
-  DefaultValuePipe,
-  Delete,
-  Get,
-  Param,
-  ParseBoolPipe,
-  Patch,
-  Post,
-  Query,
-  UseGuards,
-} from '@nestjs/common';
-import { OrderService } from './order.service';
-import { CurrentUser, Roles } from '@common/decorators';
+import { RolesGuard } from '@auth/guards/role.guard';
 import { JwtPayload } from '@auth/interfaces';
+import { CurrentUser, Roles } from '@common/decorators';
+import { Body, Controller, Delete, Get, Param, Patch, Post, UseGuards } from '@nestjs/common';
 import { Order, Role } from '@prisma/client';
 import { CreateOrderDto } from './dto';
-import { RolesGuard } from '@auth/guards/role.guard';
+import { OrderService } from './order.service';
 
 @Controller('order')
 export class OrderController {

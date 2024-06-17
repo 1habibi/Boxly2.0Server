@@ -1,13 +1,12 @@
-import { ForbiddenException, Inject, Injectable, NotFoundException } from '@nestjs/common';
-import { PrismaService } from '@prisma/prisma.service';
-import { Role, User } from '@prisma/client';
-import { genSaltSync, hashSync } from 'bcrypt';
 import { JwtPayload } from '@auth/interfaces';
-import { CACHE_MANAGER } from '@nestjs/cache-manager';
-import { Cache } from 'cache-manager';
-import { ConfigService } from '@nestjs/config';
 import { convertToSecondsUtil } from '@common/utils';
-import { compareSync } from 'bcrypt';
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
+import { ForbiddenException, Inject, Injectable, NotFoundException } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import { Role, User } from '@prisma/client';
+import { PrismaService } from '@prisma/prisma.service';
+import { compareSync, genSaltSync, hashSync } from 'bcrypt';
+import { Cache } from 'cache-manager';
 
 @Injectable()
 export class UserService {
