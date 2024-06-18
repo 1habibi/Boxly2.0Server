@@ -30,7 +30,7 @@
 
 `npx prisma migrate dev --name init`
 
-4. Запуск скрипта для запуска сервера
+6. Запуск скрипта для запуска сервера
 
 `npm run start:dev`
 
